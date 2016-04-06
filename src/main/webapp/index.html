@@ -1,0 +1,33 @@
+<html ng-app="mydemoapp">
+<head>
+    <meta charset="utf-8">
+    <title>My Demo App</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script>
+        var countryApp = angular.module('mydemoapp', []);
+        countryApp.controller('mydemocontroller', function ($scope, $http){
+            $http.get('/movies').success(function(data) {
+                $scope.movies = data;
+            });
+        });
+    </script>
+</head>
+<body ng-controller="mydemocontroller">
+<h2>Movie List</h2>
+<table class="pure-table">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="movie in movies">
+        <td>{{movie.id}}</td>
+        <td>{{movie.name}}</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
