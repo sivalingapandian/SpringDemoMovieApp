@@ -1,0 +1,3 @@
+# SpringDemoMovieApp
+
+postgres database needed
