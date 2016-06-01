@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>moviedemo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -21,6 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<docker.image.prefix>spandian</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -47,11 +48,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.1-901-1.jdbc4</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>postgresql</groupId>-->
+			<!--<artifactId>postgresql</artifactId>-->
+			<!--<version>9.1-901-1.jdbc4</version>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -61,11 +62,36 @@
 	</dependencies>
 	
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.9</version>
+				<configuration>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<serverId>docker-hub</serverId>
+					<registryUrl>https://index.docker.io/v1/</registryUrl>
+					<image>${docker.image.prefix}/${project.artifactId}</image>
+					<newName>${docker.image.prefix}/${project.artifactId}:${project.version}</newName>
+					<forceTags>true</forceTags>
+					<resources>
+						<resource>
+							<!--<targetPath>/</targetPath>-->
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+
+
 		</plugins>
 	</build>
 	
